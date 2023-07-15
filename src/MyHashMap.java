@@ -1,15 +1,15 @@
 public class MyHashMap<K, V> {
     private final int INIT_SIZE = 16;
-    private final int CUT_RATE = 4;
     private Object[] array = new Object[INIT_SIZE];
     private int size = 0;
 
     public void put(K key, V value){
+        if (size == array.length - 1)
+            resize(array.length * 2);
         int index = index(key);
         SLNode<K, V> newEntry = new SLNode<>(key, value, null);
         if(array[index] == null){
             array[index] = newEntry;
-            size++;
         }else {
             SLNode<K, V> previousNode = null;
             SLNode<K, V> currentNode = (SLNode<K, V>) array[index];
@@ -20,11 +20,11 @@ public class MyHashMap<K, V> {
                 }
                 previousNode = currentNode;
                 currentNode = currentNode.getNext();
-                size++;
             }
             if(previousNode != null)
                 previousNode.setNext(newEntry);
         }
+        size++;
     }
 
     public V get(K key){
@@ -61,24 +61,10 @@ public class MyHashMap<K, V> {
             previous = entry;
             entry = entry.getNext();
         }
-        if (array.length > INIT_SIZE && size < array.length / CUT_RATE)
-            resize(array.length / 2);
     }
 
     public int size() {
         return size;
-    }
-
-    public void display(){
-        for(int i = 0; i < INIT_SIZE; i++){
-            if(array[i] != null){
-                SLNode<K, V> currentNode = (SLNode<K, V>) array[i];
-                while (currentNode != null){
-                    System.out.printf("Key is %s and value is %s%n", currentNode.getKey(), currentNode.getValue());
-                    currentNode = currentNode.getNext();
-                }
-            }
-        }
     }
 
     private int index(K key){
@@ -95,7 +81,7 @@ public class MyHashMap<K, V> {
     }
 
     public void clear() {
-        for (int i = 0; i < size; i++)
-            array[i] = null;
+        array = new Object[INIT_SIZE];
+        size = 0;
     }
 }

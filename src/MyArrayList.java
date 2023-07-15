@@ -1,6 +1,5 @@
 public class MyArrayList<T> {
     private final int INIT_SIZE = 16;
-    private final int CUT_RATE = 4;
     private Object[] array = new Object[INIT_SIZE];
     private int size = 0;
 
@@ -10,18 +9,24 @@ public class MyArrayList<T> {
         array[size++] = value;
     }
 
+    private void indexCheck(int index) {
+        if (index < 0 || index >= size) {
+            throw new ArrayIndexOutOfBoundsException("Index out of bounds");
+        }
+    }
+
     public T get(int index) {
+        indexCheck(index);
         return (T) array[index];
     }
 
     public void remove(int index) {
+        indexCheck(index);
         for (int i = index; i < size; i++) {
             array[i] = array[i + 1];
             array[size] = null;
-            size--;
-            if (array.length > INIT_SIZE && size < array.length / CUT_RATE)
-                resize(array.length / 2);
         }
+        size--;
     }
 
     public int size() {
@@ -35,7 +40,7 @@ public class MyArrayList<T> {
     }
 
     public void clear() {
-        for (int i = 0; i < size; i++)
-            array[i] = null;
+        array = new Object[INIT_SIZE];
+        size = 0;
     }
 }

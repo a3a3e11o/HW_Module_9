@@ -17,7 +17,14 @@ public class MyLinkedList<T> {
         size++;
     }
 
+    private void indexCheck(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+    }
+
     DLNode<T> getNode(int index) {
+        indexCheck(index);
         DLNode<T> currentNode = firstNode;
         for(int i = 0; i < index; i++) {
             currentNode = currentNode.getNextNode();
@@ -26,9 +33,7 @@ public class MyLinkedList<T> {
     }
 
     public void remove(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
+        indexCheck(index);
         if (index == 0) {
             firstNode = firstNode.getNextNode();
         } else {
@@ -39,9 +44,7 @@ public class MyLinkedList<T> {
     }
 
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException("Index out of bounds");
-        }
+        indexCheck(index);
         DLNode<T> currentNode = firstNode;
         for(int i = 0; i < index; i++) {
             currentNode = currentNode.getNextNode();
@@ -54,13 +57,6 @@ public class MyLinkedList<T> {
     }
 
     public void clear() {
-        for (DLNode<T> x = firstNode; x != null; ) {
-            DLNode<T> next = x.getNextNode();
-            x.setValue(null);
-            x.setNextNode(null);
-            x.setPrevNode(null);
-            x = next;
-        }
         firstNode = lastNode = null;
         size = 0;
     }
